@@ -38,3 +38,5 @@ struct LoadingView: View {
 //        LoadingView(show: .constant(true)) // Додайте власний колір фону для попереднього перегляду
 //    }
 //}
+
+//dfdf
