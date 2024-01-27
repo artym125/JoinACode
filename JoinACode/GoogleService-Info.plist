@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAowQZW4L9Y9yMvKdWLpM9Pf4zldpeZy2E</string>
+	<string>AIzaSyBb5OS3s1d4ja3qfLBgsuoGXM_n-X1qlH0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>505669093249</string>
+	<string>447109157220</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ArtymOstap.JoinACode</string>
 	<key>PROJECT_ID</key>
-	<string>joinacode-1</string>
+	<string>test2-48db9</string>
 	<key>STORAGE_BUCKET</key>
-	<string>joinacode-1.appspot.com</string>
+	<string>test2-48db9.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:505669093249:ios:eb474477ca7d874c034a80</string>
+	<string>1:447109157220:ios:6c46c00735b5b4524c2a71</string>
 </dict>
 </plist>
