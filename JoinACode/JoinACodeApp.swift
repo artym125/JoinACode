@@ -30,7 +30,7 @@ struct JoinACodeApp: App {
     var body: some Scene {
         WindowGroup {
             if logStatus {
-                Text("Юзер знайдений, ти в системі")
+                MainView()
             } else {
                 LoginView()
             }

@@ -1,8 +1,8 @@
 //
-//  LoginView.swift
+//  RegistrationView.swift
 //  JoinACode
 //
-//  Created by Ostap Artym on 26.01.2024.
+//  Created by Ostap Artym on 28.01.2024.
 //
 
 import SwiftUI
@@ -11,167 +11,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseFirestoreSwift
-//import FirebaseFirestore
 
-struct LoginView: View {
-    
-    @State var emailID: String = ""
-    @State var password: String = ""
-    //View Properties
-    @State var createAccount: Bool = false
-    @State var showError: Bool = false
-    @State var errorMessage: String = ""
-    
-    @State var isLoading: Bool = false
-    
-    @AppStorage("log_status") var logStatus: Bool = false
-    @AppStorage("user_profile_url") var profileURL: URL?
-    @AppStorage("user_name") var userNameStored: String = ""
-    @AppStorage("user_UID") var userUID: String = ""
-    
-    var body: some View {
-        VStack {
-            Text("Join A Code 🚀")
-                .font(.title.bold())
-                .foregroundStyle(.white)
-                
-            Spacer()
-            
-            VStack(spacing: 15) {
-                
-                CustomTextField(objectOfTextField: $emailID, textFieldType: TextField("", text: $emailID, prompt: Text("Email").foregroundColor(.gray))
-                                    .keyboardType(.emailAddress) // Додайте цей рядок
-                                , textContentType: .emailAddress)
-                
-                CustomTextField(objectOfTextField: $password, textFieldType: SecureField("", text: $password, prompt: Text("Password").foregroundColor(.gray)))
-
-                
-                Button {
-                    resetPassword()
-                } label: {
-                    Text("Reset password ?")
-                        .font(.callout)
-                        .fontWeight(.medium)
-                        .hAlignment(.trailing)
-                        .tint(.white.opacity(0.8))
-                        .padding(.top, 20)
-                }
-                
-                Button {
-                    loginUser()
-                } label: {
-                    Text("SIGN IN")
-                        .foregroundStyle(Color.white)
-                        .fontWeight(.bold)
-                        .hAlignment(.center)
-                        .buttonStyleFill(.blue.opacity(0.5))
-                }
-            }
-            .padding(.top, 20)
-            
-            Spacer()
-            
-            VStack(spacing: 5) {
-                Text("Dont have an account?")
-                    .foregroundStyle(Color.gray)
-                
-                Button("Register Now") {
-                    createAccount.toggle()
-                }
-                .font(.title2.bold())
-                .foregroundStyle(.white)
-            }
-            
-            
-            
-        }
-        .padding(15)
-        .overlay(content: {
-            LoadingView(show: $isLoading)
-        })
-        .background {
-            ZStack {
-                
-                Image("TestImage2")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                BlurView()
-            }
-            .ignoresSafeArea()
-        }
-        .fullScreenCover(isPresented: $createAccount) {
-            RegistrationView()
-        }
-        .alert(errorMessage, isPresented: $showError) {
-            
-        }
-    }
-    
-    func loginUser() {
-        isLoading = true
-        endEditingCloseKeyboards()
-        Task {
-            do {
-                try await Auth.auth().signIn(withEmail: emailID, password: password)
-                print("User Found")
-                try await fetchUser()
-            } catch {
-                await setError(error)
-            }
-        }
-    }
-    
-    func fetchUser() async throws {
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-        let user = try await Firestore.firestore().collection("Users").document(userID).getDocument(as: UserModel.self)
-        await MainActor.run(body: {
-            userUID = userID
-            userNameStored = user.nickname
-
-            profileURL = user.userProfileURL
-            logStatus = true
-        })
-    }
-    
-    func setError(_ error: Error) async {
-        await MainActor.run {
-            errorMessage = error.localizedDescription
-            showError.toggle()
-            isLoading = false
-        }
-    }
-    
-    func resetPassword() {
-        Task {
-            do {
-                try await Auth.auth().sendPasswordReset(withEmail: emailID)
-                print("Link Sent")
-            } catch {
-                await setError(error)
-            }
-        }
-    }
-}
-
-#Preview {
-    LoginView()
-}
-
-struct BlurView: UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        
-    }
-    
-}
-
-//MARK: RegistrationView
 struct RegistrationView: View {
     
     @State var fullname: String = ""
@@ -289,7 +129,7 @@ struct RegistrationView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                     } else {
-                        Image(systemName: "person.circle.fill")
+                        Image("defaulUserPic")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .foregroundStyle(LinearGradient(colors: [Color.white, Color.blue], startPoint: .topTrailing, endPoint: .bottomLeading))
@@ -359,6 +199,12 @@ struct RegistrationView: View {
             .buttonDisableAndOpacity(fullname == "" || nickname == "" || emailID == "" || password == "")
             .padding(.top, 15)
         }
+        .onAppear {
+                // Check if userProfilePictureData is nil, and if so, set it to the default image
+                if userProfilePictureData == nil {
+                    userProfilePictureData = UIImage(named: "defaulUserPic")?.jpegData(compressionQuality: 1)
+                }
+            }
     }
     
     func registerUser() {
@@ -366,6 +212,11 @@ struct RegistrationView: View {
         endEditingCloseKeyboards()
         Task {
             do {
+//                if userProfilePictureData == nil {
+//                    // Use the default image if no photo selected
+//                    userProfilePictureData = UIImage(systemName: "person.circle.fill")?.jpegData(compressionQuality: 1.0)
+//                }
+                
                 // Creating User
                 try await Auth.auth().createUser(withEmail: emailID, password: password)
                 // Upload userImage into Firebase Profile
@@ -406,65 +257,6 @@ struct RegistrationView: View {
     }
 }
 
-extension View {
-    
-    func endEditingCloseKeyboards() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
-    func hAlignment (_ alignment: Alignment) -> some View {
-        self
-            .frame(maxWidth: .infinity, alignment: alignment)
-    }
-    
-    func vAlignment (_ alignment: Alignment) -> some View {
-        self
-            .frame(maxHeight: .infinity, alignment: alignment)
-    }
-    
-    // Необхідно переробити у Style View Extension
-    
-    func borderLine(_ width: CGFloat, _ color: Color) -> some View {
-        self
-            .padding(.horizontal, 15)
-            .padding(.vertical, 15)
-            .background {
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .stroke(color, lineWidth: width)
-            }
-    }
-    
-    func buttonStyleFill(_ color: Color) -> some View {
-        self
-            .padding(.horizontal, 15)
-            .padding(.vertical, 15)
-            .background {
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .fill(color)
-            }
-    }
-    
-    func buttonDisableAndOpacity(_ items: Bool) -> some View {
-        self
-            .disabled(items)
-            .opacity(items ? 0.4 : 1)
-    }
-}
-
-struct CustomTextField<TextFieldType>: View where TextFieldType: View {
-
-    @Binding var objectOfTextField: String
-    var textFieldType: TextFieldType
-    var textContentType: UITextContentType?
-
-    var body: some View {
-            textFieldType
-                .padding()
-                .textContentType(textContentType)
-                .background(objectOfTextField.isEmpty ? Color.gray.opacity(0.3) : Color.gray.opacity(0.6))
-                .cornerRadius(12)
-                .foregroundColor(Color.white)
-                .font(.headline)
-                .accentColor(Color.white.opacity(0.8))
-    }
+#Preview {
+    RegistrationView()
 }
