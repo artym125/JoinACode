@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B5432C7D2B67A0900029BB1B /* UserProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5432C7C2B67A0900029BB1B /* UserProjectView.swift */; };
+		B5432C7F2B67A28D0029BB1B /* ReusableProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5432C7E2B67A28D0029BB1B /* ReusableProjectsView.swift */; };
+		B5432C832B67A9F10029BB1B /* ProjectCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5432C822B67A9F10029BB1B /* ProjectCardView.swift */; };
 		B5523FEC2B63B67C00917400 /* JoinACodeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5523FEB2B63B67C00917400 /* JoinACodeApp.swift */; };
 		B5523FF02B63B67D00917400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5523FEF2B63B67D00917400 /* Assets.xcassets */; };
 		B5523FF32B63B67D00917400 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5523FF22B63B67D00917400 /* Preview Assets.xcassets */; };
@@ -30,6 +33,9 @@
 		B5B04F942B66D7BB00D82E03 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B5B04F932B66D7BB00D82E03 /* SDWebImageSwiftUI */; };
 		B5B04F962B66EBB500D82E03 /* CreatingNewProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B04F952B66EBB500D82E03 /* CreatingNewProject.swift */; };
 		B5B04F982B66EBDF00D82E03 /* ProjectsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B04F972B66EBDF00D82E03 /* ProjectsModel.swift */; };
+		B5B694262B682654004A088F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B694252B682654004A088F /* SearchView.swift */; };
+		B5B694282B683002004A088F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B694272B683002004A088F /* HomeView.swift */; };
+		B5B6942B2B684EC4004A088F /* CreatingNewProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B6942A2B684EC4004A088F /* CreatingNewProjectViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +56,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B5432C7C2B67A0900029BB1B /* UserProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProjectView.swift; sourceTree = "<group>"; };
+		B5432C7E2B67A28D0029BB1B /* ReusableProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProjectsView.swift; sourceTree = "<group>"; };
+		B5432C822B67A9F10029BB1B /* ProjectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCardView.swift; sourceTree = "<group>"; };
 		B5523FE82B63B67C00917400 /* JoinACode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JoinACode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5523FEB2B63B67C00917400 /* JoinACodeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinACodeApp.swift; sourceTree = "<group>"; };
 		B5523FEF2B63B67D00917400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -69,6 +78,9 @@
 		B5B04F902B66CB4E00D82E03 /* ReusableUserProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableUserProfileContent.swift; sourceTree = "<group>"; };
 		B5B04F952B66EBB500D82E03 /* CreatingNewProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingNewProject.swift; sourceTree = "<group>"; };
 		B5B04F972B66EBDF00D82E03 /* ProjectsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsModel.swift; sourceTree = "<group>"; };
+		B5B694252B682654004A088F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		B5B694272B683002004A088F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B5B6942A2B684EC4004A088F /* CreatingNewProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingNewProjectViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,10 +156,12 @@
 		B552401A2B63E68500917400 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B5B694292B683FA3004A088F /* ProjectsView */,
+				B5B04F8A2B66A0EC00D82E03 /* MainView.swift */,
+				B5B04F812B669F5B00D82E03 /* Helpers */,
 				B5B04F8C2B66A10900D82E03 /* GeneralView */,
 				B5B04F8D2B66A22D00D82E03 /* Profile */,
 				B5B04F842B669FAB00D82E03 /* Login+Registration */,
-				B5B04F812B669F5B00D82E03 /* Helpers */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -191,8 +205,8 @@
 		B5B04F8C2B66A10900D82E03 /* GeneralView */ = {
 			isa = PBXGroup;
 			children = (
-				B5B04F8A2B66A0EC00D82E03 /* MainView.swift */,
-				B5B04F952B66EBB500D82E03 /* CreatingNewProject.swift */,
+				B5B694252B682654004A088F /* SearchView.swift */,
+				B5B694272B683002004A088F /* HomeView.swift */,
 			);
 			path = GeneralView;
 			sourceTree = "<group>";
@@ -204,6 +218,18 @@
 				B5B04F902B66CB4E00D82E03 /* ReusableUserProfileContent.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		B5B694292B683FA3004A088F /* ProjectsView */ = {
+			isa = PBXGroup;
+			children = (
+				B5B04F952B66EBB500D82E03 /* CreatingNewProject.swift */,
+				B5432C7C2B67A0900029BB1B /* UserProjectView.swift */,
+				B5432C7E2B67A28D0029BB1B /* ReusableProjectsView.swift */,
+				B5432C822B67A9F10029BB1B /* ProjectCardView.swift */,
+				B5B6942A2B684EC4004A088F /* CreatingNewProjectViewModel.swift */,
+			);
+			path = ProjectsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,13 +379,19 @@
 				B552401D2B63E6AF00917400 /* LoginView.swift in Sources */,
 				B5B04F8B2B66A0EC00D82E03 /* MainView.swift in Sources */,
 				B5B04F8F2B66A24B00D82E03 /* ProfileView.swift in Sources */,
+				B5B6942B2B684EC4004A088F /* CreatingNewProjectViewModel.swift in Sources */,
 				B5B04F862B669FCF00D82E03 /* BlurView.swift in Sources */,
 				B55273E02B65BC2F00C80569 /* LoadingView.swift in Sources */,
+				B5432C7D2B67A0900029BB1B /* UserProjectView.swift in Sources */,
+				B5B694262B682654004A088F /* SearchView.swift in Sources */,
 				B5B04F962B66EBB500D82E03 /* CreatingNewProject.swift in Sources */,
+				B5432C7F2B67A28D0029BB1B /* ReusableProjectsView.swift in Sources */,
+				B5B694282B683002004A088F /* HomeView.swift in Sources */,
 				B55273D82B65948700C80569 /* UserModel.swift in Sources */,
 				B5B04F982B66EBDF00D82E03 /* ProjectsModel.swift in Sources */,
 				B5B04F882B669FF400D82E03 /* CustomTextField.swift in Sources */,
 				B5523FEC2B63B67C00917400 /* JoinACodeApp.swift in Sources */,
+				B5432C832B67A9F10029BB1B /* ProjectCardView.swift in Sources */,
 				B5B04F912B66CB4E00D82E03 /* ReusableUserProfileContent.swift in Sources */,
 				B5B04F832B669F6E00D82E03 /* View+Extension.swift in Sources */,
 				B5B04F802B669F0400D82E03 /* RegistrationView.swift in Sources */,

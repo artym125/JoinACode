@@ -10,11 +10,14 @@ import SwiftUI
 
 //Rename to generalView
 struct MainView: View {
+    
+    @State var recentProjects: [ProjectsModel] = []
+    @State private var userProfile: UserModel?
     var body: some View {
         
         TabView {
             
-            Text("Home")
+            HomeView()
                 .tabItem {
                     Image(systemName: "house.circle")
                     Text("Home")
@@ -26,8 +29,7 @@ struct MainView: View {
                     Text("Search")
                 }
             
-            CreatingNewProject{ project in
-            }
+            UserProjectView()
                 .tabItem {
                     Image(systemName: "plus.circle")
                     Text("NEW")

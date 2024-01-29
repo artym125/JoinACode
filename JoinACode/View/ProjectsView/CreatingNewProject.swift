@@ -12,11 +12,16 @@ import FirebaseStorage
 import FirebaseFirestore
 
 struct CreatingNewProject: View {
+    
+    @StateObject var CreatingNPvm: CreatingNewProjectViewModel = CreatingNewProjectViewModel()
     //onProject
     var onProject: (ProjectsModel)->()
-    //project title
-    @State private var projectText: String = ""
+    
     @State private var projectImageData: Data?
+    @State private var projectTitle: String = ""
+    @State private var projectTechStack: String = ""
+    @State private var projectDescription: String = ""
+    
     
     @AppStorage("user_profile_url") private var profileURL: URL?
     @AppStorage("user_name") private var userName: String = ""
@@ -30,17 +35,10 @@ struct CreatingNewProject: View {
     @State private var photoItem: PhotosPickerItem?
     @FocusState private var showKeyboard: Bool
 
-
-
-
     var body: some View {
         VStack {
             HStack {
-//                Menu {
-//                    Button("Cancel", role: .destructive){
-//                        dismiss()
-//                    }
-//                } 
+                
                 Button {
                     dismiss()
                 }
@@ -63,7 +61,7 @@ struct CreatingNewProject: View {
                         .background(.green, in: Capsule())
 
                 })
-                .buttonDisableAndOpacity(projectText == "")
+                .buttonDisableAndOpacity(projectTitle == "" || projectTechStack == "" || projectDescription == "")
 
             }
             .padding(.horizontal, 15)
@@ -78,6 +76,7 @@ struct CreatingNewProject: View {
                     .bold()
                     .tint(.white)
             }
+            
             
             
             ScrollView(.vertical, showsIndicators: false) {
@@ -107,45 +106,27 @@ struct CreatingNewProject: View {
                                 .onTapGesture {
                                     showImagePicker.toggle()
                                 }
-//                                .padding(15)
                         }
                         .clipped()
-                        .frame(height: 200)
+                        .frame(height: 230)
                     } else {
-                        // Дефолтне зображення, якщо projectImageData є nil
-                        Image("pictureNotFound")
+                        // Default pic nil
+                    Image("pictureNotFound7")
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .aspectRatio(contentMode: .fit)
                             .frame(height: 200)
                             .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .onTapGesture {
                                 showImagePicker.toggle()
                             }
-//                            .padding(15)
-//                            .overlay(alignment: .topTrailing) {
-//                                Button {
-//                                    withAnimation(.easeInOut(duration: 0.25)){
-//                                        self.projectImageData = nil
-//                                    }
-//                                } label: {
-//                                    Image(systemName: "trash")
-//                                        .font(.title2)
-//                                        .fontWeight(.bold)
-//                                        .tint(.red)
-//                                }
-//                                .padding(10)
-//                            }
                     }
                     Text("choose image")
                         .font(.system(size: 15))
                         .foregroundStyle(.gray)
                         .opacity(projectImageData == nil ? 1 : 0)
                     
-                    VStack {
-                        TextField("Project Name", text: $projectText, axis: .vertical)
-                            .focused($showKeyboard)
-                    }
-                    
+
+                    TextFieldData()
                     
                     
                 }
@@ -167,6 +148,8 @@ struct CreatingNewProject: View {
                 Button("Done"){
                     showKeyboard = false
                 }
+                .opacity(showKeyboard ? 1 : 0)
+                .animation(.easeInOut(duration: 0.15), value: showKeyboard)
             }
             .foregroundColor(.green)
             .padding(.horizontal, 15)
@@ -194,15 +177,68 @@ struct CreatingNewProject: View {
             LoadingView(show: $isLoading)
         }
         .background {
-            Image("TestImage1")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            ZStack {
+                Image("pictureNotFound7")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
+            
             
             BlurView()
                 .ignoresSafeArea()
+            }
         }
         .preferredColorScheme(.dark)
+    }
+    
+    @ViewBuilder
+    func TextFieldData() -> some View {
+        VStack(spacing: 10) {
+            
+            CustomTextField(
+                objectOfTextField: $projectTitle,
+                textFieldType: TextField(
+                    "",
+                    text: $projectTitle,
+                    prompt:Text("Title*")
+                        .foregroundColor(.gray)))
+            .focused($showKeyboard)
+            
+            CustomTextField(
+                objectOfTextField: $projectTechStack,
+                textFieldType: TextField(
+                    "",
+                    text: $projectTechStack,
+                    prompt:Text("Project tech stack*")
+                        .foregroundColor(.gray)))
+            .focused($showKeyboard)
+            
+            TextField("", text: $projectDescription, prompt: Text("Description*")
+                    .foregroundColor(.gray), axis: .vertical)
+                .frame(minHeight: 100, alignment: .top)
+                .padding()
+                .background(projectDescription.isEmpty ? Color.gray.opacity(0.3) : Color.gray.opacity(0.6))
+                .cornerRadius(12)
+                .foregroundColor(Color.white)
+                .font(.headline)
+                .accentColor(Color.white.opacity(0.8))
+                .focused($showKeyboard)
+                .onChange(of: projectDescription) { newValue in
+                    if newValue.count > 250 {
+                        projectDescription = String(newValue.prefix(250))
+                    }
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    Text("\(projectDescription.count) / 250")
+                        .font(.caption2)
+                        .foregroundColor(.white.opacity(0.8))
+                        .padding(5)
+                }
+            
+            Text("* - require field")
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.8))
+        }
     }
     
     func createProjectItem() {
@@ -218,10 +254,10 @@ struct CreatingNewProject: View {
                     let _ = try await storageReference.putDataAsync(projectImageData)
                     let downloadURL = try await storageReference.downloadURL()
                     
-                    let project = ProjectsModel(text: projectText, imageURL: downloadURL, imageReferenceID: imageReferenceID, userName: userName, userUID: userUID, userCountry: "", userLanguage: "", userProfileURL: profileURL)
+                    let project = ProjectsModel(text: projectTitle, imageURL: downloadURL, imageReferenceID: imageReferenceID, userName: userName, userUID: userUID, userCountry: "", userLanguage: "", userProfileURL: profileURL)
                     try await createDocumentInFirebase(project)
                 } else {
-                    let project = ProjectsModel(text: projectText, userName: userName, userUID: userUID, userCountry: "", userLanguage: "", userProfileURL: profileURL)
+                    let project = ProjectsModel(text: projectTitle, userName: userName, userUID: userUID, userCountry: "", userLanguage: "", userProfileURL: profileURL)
                     try await createDocumentInFirebase(project)
                 }
             } catch {
@@ -231,9 +267,13 @@ struct CreatingNewProject: View {
     }
     
     func createDocumentInFirebase(_ project: ProjectsModel) async throws {
-        let _ = try Firestore.firestore().collection("Projects").addDocument(from: project, completion: { error in
+        let doc = Firestore.firestore().collection("Projects").document()
+        let _ = try doc.setData(from: project, completion: { error in
             if error == nil {
+                
                 isLoading = false
+                var updatedProject = project
+                updatedProject.id = doc.documentID
                 onProject(project)
                 dismiss()
             }
@@ -254,3 +294,21 @@ struct CreatingNewProject: View {
         
     }
 }
+
+//extension UIImage {
+//    static var pictureNotFoundIndex = 0
+//    
+//    static func getNextPictureNotFound() -> UIImage? {
+//        let pictureNotFoundNames = ["pictureNotFound1", "pictureNotFound2"]
+//        
+//        guard pictureNotFoundIndex < pictureNotFoundNames.count else {
+//            // Якщо індекс виходить за межі масиву, повертайте nil або обирайте іншу логіку за необхідності.
+//            return nil
+//        }
+//        
+//        let imageName = pictureNotFoundNames[pictureNotFoundIndex]
+//        pictureNotFoundIndex = (pictureNotFoundIndex + 1) % pictureNotFoundNames.count
+//        
+//        return UIImage(named: imageName)
+//    }
+//}
