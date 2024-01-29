@@ -238,6 +238,7 @@ struct CreatingNewProject: View {
             Text("* - require field")
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.8))
+                .padding(10)
         }
     }
     
